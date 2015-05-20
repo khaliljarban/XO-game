@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		 <style>
+			.custom1{color:#fff; border:1px solid #fff; text-align:center; font-size:36px; line-height:100px; height:100px; width:100px; margin:10px; float:left; }
+			.newrow{clear:both;}
+			.custom1 img{width:100%; height:auto;}
+			#board{background:url('imgs/bg.jpg'); width:366px; height:366px;}
+		 </style>
+		 <script>
+		 var gameBoard=[0,0,0,0,0,0,0,0,0];// 1 = x , 2=o
+		 var clickcounter=0;
+		 var issuccess=false;
+		 var turn=true; //true= x, false= o
+		 function init_cb(){
+			var board=document.getElementById('board');
+			var string='';
+			for(var i=0;i<9;i++){
+				gameBoard[i]=0;
+				string+='<div id="cell'+i+'" onclick="cellclicked('+(i)+')" class="custom1 '+((i%3)==0 ? 'newrow' : '')+'" ></div>';
+			}
+			turn=true;
+			board.innerHTML=string;
+		}
+		function cellclicked(c){
+			var cell=document.getElementById('cell'+c);
+			if(gameBoard[c]!=0 || issuccess)
+				return;
+			
+			if(turn){
+				cell.innerHTML='<img src="imgs/x.png" />';
+				gameBoard[c]=1;
+			}else{
+				cell.innerHTML='<img src="imgs/o.png" />';
+				gameBoard[c]=2;
+			}
+			issuccess=checkforvictory();
+			if(issuccess){
+				alert((turn ? 'x' : '0')+' winner');
+				return ;
+			}
+ 			turn=!turn;
+			
+			if(++clickcounter==9){
+				alert('we have a draw');
+			}
+		}
+		
+		function checkforvictory(){
+			for(var i=0;i<3; i++){
+				if(gameBoard[i]!=0 && 
+						gameBoard[i]==gameBoard[i+3] &&
+						gameBoard[i]==gameBoard[i+6] 
+						){
+					return true;
+				}
+				var row=i*3;
+				if(gameBoard[row]!=0 && 
+						gameBoard[row]==gameBoard[i+3] &&
+						gameBoard[row]==gameBoard[i+6] 
+						){
+					return true;
+				}
+			}
+			var diaonal1=gameBoard[0]!=0 && gameBoard[0]==gameBoard[4] && gameBoard[0] == gameBoard[8] ? true : false;
+			var diaonal2=gameBoard[2]!=0 && gameBoard[2]==gameBoard[4] && gameBoard[2] == gameBoard[6] ? true : false;
+			return diaonal1 || diaonal2;
+		}
+
+		 </script>
+	</head>
+	<body onload="init_cb()">
+		<div id="board"></div>
+		<button class="td-1-6"
+	</body>
+
+</html>
